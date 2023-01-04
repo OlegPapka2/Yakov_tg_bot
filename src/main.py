@@ -26,6 +26,8 @@ from handlers import (
 )
 from utils.initial_check_utils import check_db_connection, check_db_tables
 
+from actions import register_actions
+
 logger = logging.getLogger(__name__)
 
 
@@ -55,6 +57,9 @@ def main() -> None:
     disp.add_error_handler(error_handler)  # Error handler
 
     bot.set_my_commands(Config.BOT_COMMANDS)
+
+    # Register actions
+    register_actions(updater)
 
     if not check_db_connection():
         logger.critical("DB not found!")
