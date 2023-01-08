@@ -2,6 +2,8 @@ from datetime import datetime
 
 import requests
 from bs4 import BeautifulSoup
+from sqlalchemy.orm import Session
+
 from src.config import Config
 from src.crud.user import get_user
 from src.handlers.days_passed import compose_passed_days_msg, calc_date_diff
@@ -13,7 +15,7 @@ from src.utils.time_utils import UserTime
 
 
 @create_session
-def ru_losses(context: CallbackContext, db):
+def ru_losses(context: CallbackContext, db: Session) -> None:
     user = get_user(db, Config.OWNER_ID)
     user_time = UserTime.get_time_from_offset(user.timezone_offset)
 
@@ -48,6 +50,3 @@ def ru_losses(context: CallbackContext, db):
     msg = escape_str_md2(msg, ['*'])
 
     context.bot.send_message(chat_id=user.id, text=msg, parse_mode=ParseMode.MARKDOWN_V2)
-
-
-
